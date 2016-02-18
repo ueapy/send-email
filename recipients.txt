@@ -1,0 +1,5 @@
+#
+# List of recipients' emails
+#
+alice@email.com
+bob@email.com

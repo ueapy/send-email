@@ -24,7 +24,7 @@ parser.add_argument('-r', '--recipients_file', default='recipients.txt', type=st
                           help='file name with a list of recipients')
 parser.add_argument('-R', '--recipients', nargs='*', type=str, help='email(s) to send to')
 parser.add_argument('-t', '--subject', type=str, help='message subject')
-parser.add_argument('-b', '--body', type=str, help='message body')
+parser.add_argument('-b', '--body', default='', type=str, help='message body')
 parser.add_argument('-n', '--sign', default='', type=str, help='name to sign')
 parser.add_argument('-f', '--files', nargs='*', default=None, help='files to attach')
 parser.add_argument('-i', '--images', nargs='*', default=None, help='images to attach')
@@ -153,17 +153,16 @@ if __name__ == '__main__':
     if args.subject:
         myargs['msg_sub'] = ' '.join([myargs['msg_sub'], args.subject])
 
-    if args.body:
-        myargs['msg_body'] = args.body
-    else:
-        myargs['msg_body'] = """Hi pythonistas,
+    myargs['msg_body'] = """Hi pythonistas,
+{body}
+
 {sign}
 -----------------------------------
 On behalf of Python Users Group UEA
 website: http://ueapy.github.io
 github: http://github.com/ueapy
 -----------------------------------
-        """.format(sign=args.sign)
+        """.format(sign=args.sign, body=args.body)
     myargs['files'] = get_flist(args.files)
     myargs['images'] = get_flist(args.images)
 

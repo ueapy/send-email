@@ -24,7 +24,8 @@ parser.add_argument('-r', '--recipients_file', default='recipients.txt', type=st
                           help='file name with a list of recipients')
 parser.add_argument('-R', '--recipients', nargs='*', type=str, help='email(s) to send to')
 parser.add_argument('-t', '--subject', type=str, help='message subject')
-parser.add_argument('-b', '--body', default='', type=str, help='message body')
+parser.add_argument('-b', '--body_file', default='message_body.txt', type=str, help='text file with message body')
+parser.add_argument('-B', '--body', nargs='*', type=str, help='message body')
 parser.add_argument('-n', '--sign', default='', type=str, help='name to sign')
 parser.add_argument('-f', '--files', nargs='*', default=None, help='files to attach')
 parser.add_argument('-i', '--images', nargs='*', default=None, help='images to attach')
@@ -153,7 +154,11 @@ if __name__ == '__main__':
     if args.subject:
         myargs['msg_sub'] = ' '.join([myargs['msg_sub'], args.subject])
 
-    myargs['msg_body'] = """Hi pythonistas,
+    if args.body_file:
+        with open(args.body_file) as f:
+            myargs['msg_body'] = f.read()
+    else:
+        myargs['msg_body'] = """Hi pythonistas,
 {body}
 
 {sign}
@@ -161,8 +166,8 @@ if __name__ == '__main__':
 On behalf of Python Users Group UEA
 website: http://ueapy.github.io
 github: http://github.com/ueapy
------------------------------------
-        """.format(sign=args.sign, body=args.body)
+-----------------------------------""".format(sign=args.sign, body=args.body)
+
     myargs['files'] = get_flist(args.files)
     myargs['images'] = get_flist(args.images)
 
